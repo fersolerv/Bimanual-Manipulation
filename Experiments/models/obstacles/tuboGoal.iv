@@ -1,0 +1,18 @@
+#Inventor V2.1 ascii
+
+
+DEF root Separator {
+
+  VRMLMaterial {
+
+  }
+  VRMLColor {
+    color 500 500 500
+
+  }
+  Cylinder {
+    radius 3.25
+    height 20
+
+  }
+}

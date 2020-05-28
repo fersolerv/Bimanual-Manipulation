@@ -1,0 +1,67 @@
+<?xml version="1" encoding="UTF-8"?>  
+<ControlSet>
+ 
+  <Control name="R/I-base" eigValue="1">
+    <DOF name="allegro_hand_right/link_0.0" value="1" />    
+  </Control>
+
+  <Control name="R/I-proximal" eigValue="1">
+    <DOF name="allegro_hand_right/link_1.0" value="1" />
+  </Control>
+
+  <Control name="R/I-distal" eigValue="1">
+    <DOF name="allegro_hand_right/link_2.0" value="1" />
+  </Control>
+
+  <Control name="R/I-last" eigValue="1">
+    <DOF name="allegro_hand_right/link_3.0" value="1" />
+  </Control>
+
+  <Control name="R/M-base" eigValue="1">
+    <DOF name="allegro_hand_right/link_4.0" value="1" />
+  </Control>
+
+  <Control name="R/M-proximal" eigValue="1">
+    <DOF name="allegro_hand_right/link_5.0" value="1" />
+  </Control>
+
+  <Control name="R/M-distal" eigValue="1">
+    <DOF name="allegro_hand_right/link_6.0" value="1" />
+  </Control>
+
+  <Control name="R/M-last" eigValue="1">
+    <DOF name="allegro_hand_right/link_7.0" value="1" />
+  </Control>
+
+  <Control name="R/R-base" eigValue="1">
+    <DOF name="allegro_hand_right/link_8.0" value="1" />
+  </Control>
+
+  <Control name="R/R-proximal" eigValue="1">
+    <DOF name="allegro_hand_right/link_9.0" value="1" />
+  </Control>
+
+  <Control name="R/R-distal" eigValue="1">
+    <DOF name="allegro_hand_right/link_10.0" value="1" />
+  </Control>
+
+  <Control name="R/R-last" eigValue="1">
+    <DOF name="allegro_hand_right/link_11.0" value="1" />
+  </Control>
+
+  <Control name="R/T-base" eigValue="1">
+    <DOF name="allegro_hand_right/link_12.0" value="1" />
+  </Control>
+
+  <Control name="R/T-proximal" eigValue="1">
+    <DOF name="allegro_hand_right/link_13.0" value="1" />
+  </Control>
+
+  <Control name="R/T-distal" eigValue="1">
+    <DOF name="allegro_hand_right/link_14.0" value="1" />
+  </Control>
+
+  <Control name="R/T-last" eigValue="1">
+    <DOF name="allegro_hand_right/link_15.0" value="1" />
+  </Control>
+</ControlSet>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<Problem name="" topology="SE3">
+	<Robot robot="../models/robots/UR5_AllegroHandR.urdf" scale="1000.0">
+		<Home X="239.63021891" Y="0.0" Z="-11.93808329" WX="0.377964" WY="-0.912487" WZ="0.156558" TH="3.864" />
+		<InvKinematic name="UR5" />
+	</Robot>
+	<Robot robot="../models/robots/UR5_AllegroHandL.urdf" scale="1000.0">
+		<Home X="-239.63021891" Y="0.0" Z="-11.93808329" WX="0.377964" WY="-0.912487" WZ="-0.156558" TH="2.4188" />
+		<InvKinematic name="UR5" />
+	</Robot>
+	<Obstacle obstacle="../models/obstacles/structure.wrl" scale="1000.0">
+		<Home X="0.0" Y="0.0" Z="0.0" TH="3.14159265" WX="0.0" WY="0.7071067812" WZ="0.7071067812" />
+	</Obstacle>
+	<Obstacle obstacle="../models/obstacles/water_bottle.wrl" scale="1000.0">
+		<Home X="-150" Y="700" Z="-330" TH="1.57" WX="0.0" WY="0.0" WZ="-1.0" />
+	</Obstacle>
+	<Obstacle obstacle="../models/obstacles/simpletable.wrl" scale="250">
+		<Home X="800" Y="500" Z="-1100" TH="1.57" WX="1.0" WY="0.0" WZ="0.0" />
+	</Obstacle>
+	<Obstacle obstacle="../models/obstacles/dining_table.wrl" scale="1">
+		<Home X="-1000" Y="400" Z="-1400" TH="1.57" WX="1.0" WY="1.0" WZ="1.0" />
+	</Obstacle>
+	<Controls robot="../models/controls/UR5_AH_RL.cntr" />
+	<Planner>
+		<Parameters>
+			<Name>omplRRTConnect</Name>
+			<Parameter name="Cspace Drawn">0</Parameter>
+			<Parameter name="Incremental (0/1)">0</Parameter>
+			<Parameter name="Max Planning Time">30</Parameter>
+			<Parameter name="Path Drawn (0/1)">1</Parameter>
+			<Parameter name="Range">1</Parameter>
+			<Parameter name="Simplify Solution">1</Parameter>
+			<Parameter name="Speed Factor">1</Parameter>
+		</Parameters>
+		<Queries>
+			<Query>
+				<Init dim="44">0.391409 0.323907 0.332812 0.367821 0.464891 0.258664 0.397041 0.324164 0.33065 0.368202 0.351812 0.315934 0.5 0.0135659 0.44291 0.448238 0.5 0.0467885 0.28359 0.274797 0.5 0.0357143 0.272969 0.285637 1 0.105678 0.169531 0.405104 0.5 0 0.368561 0.57832 0.5 0.0135659 0.347318 0.654201 0.5 0.644795 0.846521 0.860163 1 0.105678 0.0931533 0.330675</Init>
+				<Goal dim="44">0.391409 0.323907 0.332812 0.367821 0.464891 0.258664 0.397041 0.324164 0.33065 0.368202 0.351812 0.315934 0.5 0.0135659 0.44291 0.448238 0.5 0.0467885 0.28359 0.274797 0.5 0.0357143 0.272969 0.285637 1 0.105678 0.169531 0.405104 0.5 0 0.368561 0.57832 0.5 0.0135659 0.347318 0.654201 0.5 0.644795 0.846521 0.860163 1 0.105678 0.0931533 0.330675</Goal>
+			</Query>
+		</Queries>
+	</Planner>
+</Problem>
