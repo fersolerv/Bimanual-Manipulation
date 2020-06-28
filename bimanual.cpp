@@ -85,8 +85,7 @@ int main(){
 
         // Compute all the grasp that are reachable at Initial Pose of the object
         Rr->CompleteConf.clear();
-        if (kth->isGraspableObject(obj_init, Rr->RobType, _dim, grasp, *grasp_smp, 
-                                   Rr->CompleteConf, Rr->SetGrasp.at(i).HandConf)) {
+        if (kth->isGraspableObject(obj_init, Rr->RobType, _dim, grasp, *grasp_smp,Rr->CompleteConf, Rr->SetGrasp.at(i).HandConf)) {
             Rr->graspReachebles.first = Rr->CompleteConf;
             //cout << "Is graspable at INIT\n";
             //graspInfo.at(it).graspSmp.push_back(grasp_smp);

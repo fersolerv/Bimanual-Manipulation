@@ -31,11 +31,9 @@
 #include "UR5_kinematics.h"
 //#include "rob.h"
 
-
 namespace ob = ompl::base;
-
-
 namespace Kautham {
+
 bool kauthamshell::openProblem(istream* inputfile, vector <string> def_path) {
     try {
         //delete _problem;
@@ -198,7 +196,6 @@ bool kauthamshell::setRobotsConfig(vector<KthReal> smpcoords) {
     }
 }
 
-
 bool kauthamshell::setObstaclesConfig(vector<KthReal> smpcoords) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -226,7 +223,6 @@ bool kauthamshell::setObstaclesConfig(vector<KthReal> smpcoords) {
         return false;
     }
 }
-
 
 bool kauthamshell::setQuery(vector<KthReal> init, vector<KthReal> goal) {
     try {
@@ -283,7 +279,6 @@ bool kauthamshell::setQuery(vector<KthReal> init, vector<KthReal> goal) {
     }
 }
 
-
 bool kauthamshell::setInit(vector<KthReal> init) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -323,9 +318,9 @@ bool kauthamshell::setInit(vector<KthReal> init) {
     }
 }
 
-
 bool kauthamshell::setGoal(vector<KthReal> goal) {
     try {
+
         if (_problem == NULL || !problemOpened()) {
             cout << "The problem is not opened" << endl;
             return false;
@@ -342,15 +337,13 @@ bool kauthamshell::setGoal(vector<KthReal> goal) {
         //goal
         Sample* smp = new Sample(d);
         smp->setCoords(goal);
-        if (_problem->wSpace()->collisionCheck(smp)){
+        if (_problem->wSpace()->collisionCheck(smp)) {
             cout<<"Sample in collision"<<endl;
             return false;
         }
         samples->add(smp);
-
         _problem->getPlanner()->setInitSamp(samples->getSampleAt(0));
         _problem->getPlanner()->setGoalSamp(samples->getSampleAt(1));
-
         return true;
     } catch (const KthExcp& excp) {
         cout << "Error: " << excp.what() << endl << excp.more() << endl;
@@ -360,12 +353,11 @@ bool kauthamshell::setGoal(vector<KthReal> goal) {
         return false;
     } catch(...) {
         cout << "Something is wrong with the problem. Please run the "
-             << "problem with the Kautham2 application at less once in order "
+             << "problem with the Kautham application at less once in order "
              << "to verify the correctness of the problem formulation.\n";
         return false;
     }
 }
-
 
 bool kauthamshell::setInitObs(vector<KthReal> initObs) {
     try {
@@ -393,7 +385,6 @@ bool kauthamshell::setInitObs(vector<KthReal> initObs) {
         return false;
     }
 }
-
 
 bool kauthamshell::clearSampleSet() {
     try {
@@ -428,7 +419,6 @@ bool kauthamshell::clearSampleSet() {
     }
 }
 
-
 bool kauthamshell::setRobControls(istream* inputfile, vector<KthReal> init, vector<KthReal> goal) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -451,7 +441,6 @@ bool kauthamshell::setRobControls(istream* inputfile, vector<KthReal> init, vect
         return false;
     }
 }
-
 
 bool kauthamshell::setRobControls(string controlsFile, vector<KthReal> init, vector<KthReal> goal) {
     try {
@@ -476,7 +465,6 @@ bool kauthamshell::setRobControls(string controlsFile, vector<KthReal> init, vec
     }
 }
 
-
 bool kauthamshell::setDefaultRobControls(vector<KthReal> init, vector<KthReal> goal) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -499,7 +487,6 @@ bool kauthamshell::setDefaultRobControls(vector<KthReal> init, vector<KthReal> g
         return false;
     }
 }
-
 
 bool kauthamshell::setObsControls(istream* inputfile, vector<KthReal> initObs) {
     try {
@@ -524,7 +511,6 @@ bool kauthamshell::setObsControls(istream* inputfile, vector<KthReal> initObs) {
     }
 }
 
-
 bool kauthamshell::setObsControls(string controlsFile, vector<KthReal> initObs) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -547,7 +533,6 @@ bool kauthamshell::setObsControls(string controlsFile, vector<KthReal> initObs) 
         return false;
     }
 }
-
 
 bool kauthamshell::setPlannerByName(string name) {
     try {
@@ -576,7 +561,6 @@ bool kauthamshell::setPlannerByName(string name) {
         return false;
     }
 }
-
 
 bool kauthamshell::setPlanner(istream* inputfile) {
     try {
@@ -607,7 +591,6 @@ bool kauthamshell::setPlanner(istream* inputfile) {
     }
 }
 
-
 bool kauthamshell::setPlanner(string problemfilename) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -636,7 +619,6 @@ bool kauthamshell::setPlanner(string problemfilename) {
     }
 }
 
-
 bool kauthamshell::setPlannerParameter(string parameter, string value) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -663,7 +645,6 @@ bool kauthamshell::setPlannerParameter(string parameter, string value) {
         return false;
     }
 }
-
 
 bool kauthamshell::setFixedObsControls() {
     try {
@@ -695,7 +676,6 @@ bool kauthamshell::setFixedObsControls() {
     }
 }
 
-
 bool kauthamshell::solve() {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -717,7 +697,6 @@ bool kauthamshell::solve() {
         return false;
     }
 }
-
 
 bool kauthamshell::solve_savePaths(unsigned int robot, ofstream &outRr, ofstream &outRl ){
 
@@ -815,7 +794,6 @@ bool kauthamshell::solve_savePaths(unsigned int robot, ofstream &outRr, ofstream
     return _solved;
 }
 
-
 double kauthamshell::getLastPlanComputationTime() {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -869,7 +847,6 @@ double kauthamshell::getLastPlanComputationTime() {
         return -1.0;
     }
 }
-
 
 int kauthamshell::getNumEdges() {
     try {
@@ -929,7 +906,6 @@ int kauthamshell::getNumEdges() {
     }
 }
 
-
 int kauthamshell::getNumVertices() {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -987,7 +963,6 @@ int kauthamshell::getNumVertices() {
         return -1;
     }
 }
-
 
 bool kauthamshell::connect(vector<float> smpcoords1, vector<float> smpcoords2) {
     try {
@@ -1087,7 +1062,6 @@ bool kauthamshell::connect(vector<float> smpcoords1, vector<float> smpcoords2) {
     }
 }
 
-
 bool kauthamshell::solve(ostream &graphVizPlannerDataFile) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -1157,7 +1131,6 @@ bool kauthamshell::getPath(ostream &path) {
     }
 }
 
-
 int kauthamshell::addRobot(string robFile, KthReal scale, vector<KthReal> home, vector< vector<KthReal> > limits,
                            vector< vector<KthReal> > mapMatrix, vector<KthReal> offMatrix) {
     try {
@@ -1198,7 +1171,6 @@ int kauthamshell::addRobot(string robFile, KthReal scale, vector<KthReal> home, 
     }
 }
 
-
 int kauthamshell::addObstacle(string obsFile, KthReal scale, vector<KthReal> home) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -1229,13 +1201,10 @@ bool kauthamshell::removeRobot(unsigned index) {
             cout << "The problem is not opened" << endl;
             return false;
         }
-
-        if (index < 0 && index >= _problem->wSpace()->getNumRobots()) {
-            return false;
-        } else {
+        if (index < 0 && index >= _problem->wSpace()->getNumRobots()) return false;
+        else
             _problem->wSpace()->removeRobot(index);
             return true;
-        }
     } catch (const KthExcp& excp) {
         cout << "Error: " << excp.what() << endl << excp.more() << endl;
         return false;
@@ -1249,7 +1218,6 @@ bool kauthamshell::removeRobot(unsigned index) {
         return false;
     }
 }
-
 
 bool kauthamshell::removeObstacle(unsigned index) {
     try {
@@ -1277,7 +1245,6 @@ bool kauthamshell::removeObstacle(unsigned index) {
         return false;
     }
 }
-
 
 bool kauthamshell::attachObstacle2RobotLink(int robot, int link, int obs) {
     try {
@@ -1308,7 +1275,6 @@ bool kauthamshell::attachObstacle2RobotLink(int robot, int link, int obs) {
     }
 }
 
-
 bool kauthamshell::detachObstacle(uint obs) {
     try {
         if (_problem == NULL || !problemOpened()) {
@@ -1320,10 +1286,10 @@ bool kauthamshell::detachObstacle(uint obs) {
         x = _problem->wSpace()->getObstacle(obs)->getCurrentPos()->getSE3().getPos()[0];
         y = _problem->wSpace()->getObstacle(obs)->getCurrentPos()->getSE3().getPos()[1];
         z = _problem->wSpace()->getObstacle(obs)->getCurrentPos()->getSE3().getPos()[2];
-        std::cout<<"Object "<<obs<<" detached at position ("<<x<<","<<y<<","<<z<<")"<<std::endl;
+        cout<<"Object " << obs << " detached at position ("<< x << "," << y << "," << z << ")" << endl;
         if(ret) std::cout<<"detachfunction returned TRUE\n";
         else std::cout<<"detachfunction returned FALSE\n";
-        return (ret);
+        return ret;
     } catch (const KthExcp& excp) {
         cout << "Error: " << excp.what() << endl << excp.more() << endl;
         return false;
@@ -1342,7 +1308,7 @@ bool kauthamshell::detachObstacle(uint obs) {
 // ///////////////////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool kauthamshell::ArmInverseKinematics(uint _dim,mt::Transform tfinal, vector < double > &controls){
+bool kauthamshell::ArmInverseKinematics(uint _dim, mt::Transform tfinal, vector<double> &controls) {
 
     bool ik = false;
     bool armType = true;
@@ -1363,13 +1329,11 @@ bool kauthamshell::ArmInverseKinematics(uint _dim,mt::Transform tfinal, vector <
 
     if(UR5_inv_kin(tfinal, armType, result)) {
         UR5_controls(controls_tmp,result);
-
-        vector < KthReal > cords(22);
-        for (uint i = 0; i < 6; i++){
+        vector<KthReal> cords(22);
+        for (uint i = 0; i < 6; i++) {
             cords[i] = controls_tmp[i];
             controls.at(i)= controls_tmp[i];
         }
-
         cords[6] = 0.0;
         cords[7] = 0.0;
         cords[8] = 0.0;
@@ -1387,7 +1351,6 @@ bool kauthamshell::ArmInverseKinematics(uint _dim,mt::Transform tfinal, vector <
         cords[20] = 0.0;
         cords[21] = 0.0;
 
-
         Sample* smp = new Sample(_dim);
         smp->setCoords(cords);
 
@@ -1396,31 +1359,25 @@ bool kauthamshell::ArmInverseKinematics(uint _dim,mt::Transform tfinal, vector <
         //    cout << smp->getCoords().at(i) << " ";
         //cout << endl;
 
-        if (_problem->wSpace()->collisionCheck(smp)){
-            //cout << "Sample in collision" << endl;
+        if (_problem->wSpace()->collisionCheck(smp))
+            cout << "Sample in collision" << endl;
             ik = false;
-        }else {
-            //cout << "Sample without collision" << endl;
-            ik = true;
-        }
+        else ik = true;
+        
     }
-    else{
-        ik = false;
-    }
-
+    else ik = false;
     return ik;
 }
 
-//Load the problem
-bool kauthamshell::loadProblem(std::string absPath,std::string Path){
+bool kauthamshell::loadProblem(std::string absPath,std::string Path) {
     bool respond = false;
     string dir;
-    vector <string> def_path;
+    vector<string> def_path;
     def_path.clear();
     ifstream inputfile;
 
     def_path.push_back(Path);
-    dir = absPath.substr(0,absPath.find_last_of("/")+1);
+    dir = absPath.substr(0, absPath.find_last_of("/")+1);
     def_path.push_back(dir);
     def_path.push_back(dir+"../../models/");
     inputfile.open(absPath.c_str());
@@ -1431,7 +1388,13 @@ bool kauthamshell::loadProblem(std::string absPath,std::string Path){
     return respond;
 }
 
-bool kauthamshell::isGraspableObject(int numObject, uint NumRobot, uint _dim, std::vector<float> Position, Sample &smp, vector<float> &ControlConf, vector<float> HandConf){
+bool kauthamshell::isGraspableObject(int numObject, 
+                                     uint NumRobot, 
+                                     uint _dim, 
+                                     std::vector<float> Position, 
+                                     Sample &smp, 
+                                     vector<float> &ControlConf, 
+                                     vector<float> HandConf) {
 
     mt::Transform T1 = _problem->wSpace()->getObstacle(numObject)->getHomeTransform();
     mt::Transform TworldTOrobot = _problem->wSpace()->getRobot(NumRobot)->getHomeTransform();
@@ -1441,24 +1404,19 @@ bool kauthamshell::isGraspableObject(int numObject, uint NumRobot, uint _dim, st
     mt::Point3 tr(Position.at(4), Position.at(5), Position.at(6));
     mt::Transform T2(rot, tr);
     // /////////////////////////////////////////////////////////////////////////
-
     mt::Unit3 axis1(1, 0, 0);
     mt::Scalar angle1 = -1.5708;
     mt::Rotation rot1(axis1, angle1);
     mt::Point3 tr1(0, 0, 0);
-
     mt::Transform T2b(rot1, tr1);
     // /////////////////////////////////////////////////////////////////////////////
-
     mt::Transform T3 = T1 * T2;
-    mt::Transform Tfinal = TworldTOrobot.inverse() * T3 ;
-    //std::cout<<"Wrist position relative to the Arm Base "<<Tfinal<<std::endl;
-
-    vector < KthReal > cords(7);
-    vector < KthReal > ControlConf_tmp(7);
+    mt::Transform Tfinal = TworldTOrobot.inverse() * T3;
+    std::cout << "Wrist position relative to the Arm Base " << Tfinal << std::endl;
+    vector<KthReal> cords(7);
+    vector<KthReal> ControlConf_tmp(7);
     ControlConf_tmp.clear();
     ControlConf_tmp.resize(7);
-
     cords[0] = 0.0;
     cords[1] = 0.0;
     cords[2] = 0.0;
@@ -1477,38 +1435,31 @@ bool kauthamshell::isGraspableObject(int numObject, uint NumRobot, uint _dim, st
 
     vector < double > controls;
     controls.clear();
-    for(uint k = 0; k < 6; k++){
+    for(uint i = 0; i < 6; i++) {
         controls.push_back(0.0);
     }
 
-    bool invKinSolved = ArmInverseKinematics( _dim,Tfinal, controls);
-    //bool invKinSolved = ArmInverseKinematics(0, cords);
-
-    if (invKinSolved == true){
-        for (uint k = 0 ; k< 6; k++){
-            cords[k] = controls.at(k);
-            ControlConf_tmp.at(k) = controls.at(k);
+    bool invKinSolved = ArmInverseKinematics(_dim, Tfinal, controls);
+    if (invKinSolved == true) {
+        for (uint i = 0 ; i < 6; i++) {
+            cords[i] = controls.at(i);
+            ControlConf_tmp.at(i) = controls.at(i);
         }
 
         float temporal;
         ControlConf_tmp.resize(_dim);
-        for (uint k = 6; k < ControlConf_tmp.size(); k++){
+        for (uint k = 6; k < ControlConf_tmp.size(); k++) {
             ControlConf_tmp.at(k) = HandConf.at(k-6);
 
             if((k == 7) || (k == 11) || (k == 15) || (k == 20) || (k == 8) || (k == 9) || (k == 12) || (k == 13) || (k == 16) || (k == 17) || (k == 21)){
                 temporal = ControlConf_tmp.at(k) = HandConf.at(k-6) - 0.25;
-                if(temporal < 0.0){
+                if(temporal < 0.0) {
                     ControlConf_tmp.at(k) = 0.0;
                 }
-                else{
-                    ControlConf_tmp.at(k) = temporal;
-                }
-
+                else ControlConf_tmp.at(k) = temporal;
             }
-            else{
-                if(k > 5){
-                    ControlConf_tmp.at(k) = HandConf.at(k-6);
-                }
+            else {
+                if(k > 5) ControlConf_tmp.at(k) = HandConf.at(k-6); 
             }
             temporal = 0.0;
         }
@@ -1530,31 +1481,22 @@ bool kauthamshell::isGraspableObject(int numObject, uint NumRobot, uint _dim, st
         cords[19] = 0.0;
         cords[20] = 0.0;
         cords[21] = 0.0;
-
         ControlConf.resize(_dim);
         ControlConf = ControlConf_tmp;
-
         return true;
     }
-
     return false;
 }
 
 bool kauthamshell::plan2Grasp(vector<float> goal, Sample* smp, unsigned int robot, ofstream &outRr, ofstream &outRl) {
-
-    if(setGoal(goal)){
-
-        if(solve_savePaths(robot, outRr, outRl)){
+    if(setGoal(goal)) {
+        if(solve_savePaths(robot, outRr, outRl)) {
             cout << "Path found to grasp the object" << endl;
-            //cout << endl;
             smp->setCoords(goal);
-
             _problem->wSpace()->moveRobotsTo(smp);
         }
-        else{
+        else
             cout << "Path not found to grasp the object" << endl;
-            //cout << endl;
-        }
     }
 }
 
@@ -1563,50 +1505,37 @@ bool kauthamshell::plan2Move(vector<float> init, vector<float> goal, Sample* smp
     setInit(init);
     setGoal(goal);
 
-    if(solve_savePaths(robot, outRr, outRl)){
+    if(solve_savePaths(robot, outRr, outRl)) {
         cout << "Path found to move the object" << endl;
-        //cout << endl;
         smp->setCoords(goal);
-
         _problem->wSpace()->moveRobotsTo(smp);
     }
-    else{
+    else
         cout << "Path not found to move the object" << endl;
-        //cout << endl;
+}
+
+bool kauthamshell::return2Home(vector<float> init, vector<float> home, unsigned int robot, ofstream &outRr, ofstream &outRl, Sample* smp) {
+    if(setInit(init) && setGoal(home) && solve_savePaths(robot, outRr, outRl)) {
+        smp->setCoords(home);
+        _problem->wSpace()->moveRobotsTo(smp);
+        cout << "Path found to return to home" << endl;
+    }
+    else
+        cout << "Path not fount to return to home" << endl;
     }
 }
 
-
-bool kauthamshell::return2Home(vector<float> init, vector<float> home, unsigned int robot, ofstream &outRr, ofstream &outRl, Sample* smp){
-
-    if(setInit(init)){
-
-        if(setGoal(home)){
-
-            if(solve_savePaths(robot, outRr, outRl)){
-                smp->setCoords(home);
-                _problem->wSpace()->moveRobotsTo(smp);
-                cout << "Path found to return to home" << endl;
-            }
-            else{
-                cout << "Path not fount to return to home" << endl;
-            }
-        }
-    }
-}
-
-bool kauthamshell::ChangeProblem(const char *absPath, vector <float> right, vector <float> left){
+bool kauthamshell::ChangeProblem(const char *absPath, vector <float> right, vector <float> left) {
 
     pugi::xml_document doc;
     //Load .xml file
     pugi::xml_parse_result result = doc.load_file(absPath);
-    if (!result){
+    if (!result) {
         std::cout << "Parse error: " << result.description()
                   << ", character pos = " << result.offset<<std::endl;
     }
-    else{
+    else
         std::cout << "Problem file loaded"<<std::endl;
-    }
     //Convert float values to strings
     stringstream query;
     //right arm
@@ -1663,14 +1592,9 @@ bool kauthamshell::ChangeProblem(const char *absPath, vector <float> right, vect
     doc.child("Problem").child("Planner").child("Queries").child("Query").child("Goal").text() = query.str().c_str();
 
     //Save .xml file
-    if(doc.save_file(absPath)){
-        cout << "Problem file changed and saved" << endl;
-    }
-    else{
-        cout << "Problem file NOT changed" << endl;
-        cout << endl;
-    }
+    if(doc.save_file(absPath))
+        cout << "Problem file changed and saved\n" << endl;
+    else
+        cout << "Problem file NOT changed\n" << endl;
 }
-
-
 }

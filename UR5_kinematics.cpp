@@ -1,43 +1,17 @@
-/***************************************************************************
- *   Copyright (C) 2014 by Nestor Garcia Hidalgo                           *
- *   nestor.garcia.hidalgo@upc.edu                                         *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
-
-
 #include <math.h>
 #include <utility>
 #include <limits>
 #include "UR5_kinematics.h"
-
-
 using namespace std;
 using namespace mt;
-
 
 Solution::Solution() {
     valid = false;
 }
 
-
 Solution_set::Solution_set() {
     num_solutions = 0;
 }
-
 
 Transform DH_transform(double alpha, double a, double theta, double d) {
     Matrix3x3 matrix;
@@ -52,17 +26,17 @@ Transform DH_transform(double alpha, double a, double theta, double d) {
     matrix[0][1] = -s_theta;
     matrix[0][2] = 0.;
 
-    matrix[1][0] = c_alpha*s_theta;
-    matrix[1][1] = c_alpha*c_theta;
+    matrix[1][0] = c_alpha * s_theta;
+    matrix[1][1] = c_alpha * c_theta;
     matrix[1][2] = -s_alpha;
 
-    matrix[2][0] = s_alpha*s_theta;
-    matrix[2][1] = s_alpha*c_theta;
+    matrix[2][0] = s_alpha * s_theta;
+    matrix[2][1] = s_alpha * c_theta;
     matrix[2][2] = c_alpha;
 
     point[0] = a;
-    point[1] = -d*s_alpha;
-    point[2] = d*c_alpha;
+    point[1] = -d * s_alpha;
+    point[2] = d * c_alpha;
 
     return Transform(Rotation(matrix),point);
 }
@@ -76,31 +50,31 @@ Transform UR5_dir_kin(double *theta) {
 
     Transform transform;
 
-    for (unsigned int i = 0; i < 6; ++i) {
-        transform *= DH_transform(alpha[i],a[i],theta[i]+offset[i],d[i]);
-    }
+    for (unsigned int i = 0; i < 6; ++i)
+        transform *= DH_transform(alpha[i], a[i], theta[i] + offset[i], d[i]);
 
     return transform;
 }
 
 
 double id(double *theta) {
-    Transform t0 = DH_transform(alpha0,a0,theta[0]+offset1,d1);
-    t0 *= DH_transform(alpha1,a1,theta[1]+offset2,d2);
+    Transform t0 = DH_transform(alpha0, a0, theta[0] + offset1, d1);
+    t0 *= DH_transform(alpha1, a1, theta[1] + offset2, d2);
     Point3 pS = t0.getTranslation();
-    t0 *= DH_transform(alpha2,a2,theta[2]+offset3,d3);
+    t0 *= DH_transform(alpha2, a2, theta[2] + offset3, d3);
     Point3 pE = t0.getTranslation();
-    Point3 pW1 = t0*Point3(a3,0.,0.);
-    t0 *= DH_transform(alpha3,a3,theta[3]+offset4,d4);
-    t0 *= DH_transform(alpha4,a4,theta[4]+offset5,d5);
+    Point3 pW1 = t0 * Point3(a3, 0., 0.);
+    t0 *= DH_transform(alpha3, a3, theta[3] + offset4, d4);
+    t0 *= DH_transform(alpha4, a4, theta[4] + offset5, d5);
     Point3 pW3 = t0.getTranslation();
 
-    return 0.5*((Vector3(pW1-pS).length()-(a2-a3))/((a2+a3)-(a2-a3))
-            +(hypot(a3+d5,d4)-Vector3(pW3-pE).length())/(hypot(a3+d5,d4)-hypot(a3-d5,d4)));
+    return 0.5 * ((Vector3(pW1 - pS).length() - (a2 - a3)) / ((a2 + a3) - (a2 - a3))
+            + (hypot(a3 + d5, d4) - Vector3(pW3 - pE).length()) / (hypot(a3 + d5, d4) - hypot(a3 - d5, d4)));
 }
 
 
 bool UR5_inv_kin(Transform transform, bool left_arm, double *theta) {
+    
     double theta_ref[6] = {low1+(high1-low1)*(left_arm?0.415:0.585),
                            low2+(high2-low2)*(left_arm?0.37:0.38),
                            low3+(high3-low3)*(left_arm?0.385:0.615),
@@ -110,26 +84,25 @@ bool UR5_inv_kin(Transform transform, bool left_arm, double *theta) {
     double tmp_theta[4][6];
     double tmp_id[4];
     double idMin = std::numeric_limits<double>::max();
+    
     int iMin = -1;
-
     for (unsigned int i = 0; i < 4; ++i) {
         if (UR5_NO_ERROR == UR5_inv_kin(transform,!left_arm,i/2,i%2,tmp_theta[i],theta_ref)) {
             if (tmp_theta[i][2] >= low3+(high3-low3)*(left_arm?0.27:0.50) &&
-                    tmp_theta[i][2] <= low3+(high3-low3)*(left_arm?0.50:0.73)) {
-                tmp_id[i] = id(tmp_theta[i]);
-                if (idMin > tmp_id[i]) {
-                    idMin = tmp_id[i];
-                    iMin = i;
-                }
+                tmp_theta[i][2] <= low3+(high3-low3)*(left_arm?0.50:0.73)) {
+                    tmp_id[i] = id(tmp_theta[i]);
+                    if (idMin > tmp_id[i]) {
+                        idMin = tmp_id[i];
+                        iMin = i;
+                    }
             }
         }
     }
 
     if (iMin == -1) return false;
 
-    for (unsigned int j = 0; j < 6; ++j) {
+    for (unsigned int j = 0; j < 6; ++j)
         theta[j] = tmp_theta[iMin][j];
-    }
 
     //cout << 4-iMin << endl;
 
@@ -137,14 +110,19 @@ bool UR5_inv_kin(Transform transform, bool left_arm, double *theta) {
 }
 
 
-int UR5_inv_kin(Transform transform, bool shoulder_positive, bool wrist_positive,
-                bool elbow_positive, double *theta, double *theta_ref) {
+int UR5_inv_kin(Transform transform, 
+                bool shoulder_positive, 
+                bool wrist_positive,
+                bool elbow_positive, 
+                double *theta, 
+                double *theta_ref) {
 
     double theta_tmp[6];
 
     //if no reference was specified, set the default values
     double theta_ref_tmp[6] = {0., 0., 0., 0., 0., 0.};
-    if (!theta_ref) theta_ref = &theta_ref_tmp[0];
+    if (!theta_ref) 
+        theta_ref = &theta_ref_tmp[0];
 
     double ax = transform.getRotation().getMatrix()[0][2];
     double ay = transform.getRotation().getMatrix()[1][2];
@@ -168,10 +146,10 @@ int UR5_inv_kin(Transform transform, bool shoulder_positive, bool wrist_positive
 
         adjust(&theta_tmp[0],theta_ref[0]);
 
-        if (!in_interval(&theta_tmp[0],low1,high1)) {
+        if (!in_interval(&theta_tmp[0],low1,high1))
             //theta1 is out of range
             return UR5_JOINT_1;
-        }
+
     } else {
         //theta1 has no solution
         return UR5_JOINT_1;
@@ -189,10 +167,9 @@ int UR5_inv_kin(Transform transform, bool shoulder_positive, bool wrist_positive
 
         adjust(&theta_tmp[4],theta_ref[4]);
 
-        if (!in_interval(&theta_tmp[4],low5,high5)) {
+        if (!in_interval(&theta_tmp[4],low5,high5))
             //theta5 is out of range
             return UR5_JOINT_5;
-        }
     } else {
         //theta5 has no solution
         return UR5_JOINT_5;
@@ -206,17 +183,16 @@ int UR5_inv_kin(Transform transform, bool shoulder_positive, bool wrist_positive
 
     double s5 = sin(theta_tmp[4]+offset5);
 
-    if (in_interval(&s5,0.,0.)) {
+    if (in_interval(&s5,0.,0.))
         theta_tmp[5] = theta_ref[5];
-    } else {
+    else 
         theta_tmp[5] = atan2((s1*ox-c1*oy)/s5,(-s1*nx+c1*ny)/s5) - offset6;
-    }
+
     adjust(&theta_tmp[5],theta_ref[5]);
 
-    if (!in_interval(&theta_tmp[5],low6,high6)) {
+    if (!in_interval(&theta_tmp[5],low6,high6))
         //theta6 is out of range
         return UR5_JOINT_6;
-    }
 
     double nz = transform.getRotation().getMatrix()[2][0];
 
@@ -704,7 +680,6 @@ bool in_interval(double *x, double xmin, double xmax, double tol) {
         return false;
     }
 }
-
 
 void print_transform(Transform transform) {
     for (unsigned int i = 0; i < 3; ++i) {

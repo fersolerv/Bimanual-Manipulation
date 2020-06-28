@@ -65,7 +65,12 @@ namespace Kautham {
         int getNumEdges();
         int getNumVertices();
         bool connect(vector<KthReal> smpcoords1, vector<KthReal> smpcoords2);
-        int addRobot(string robFile, KthReal scale, vector<KthReal> home, vector< vector<KthReal> > limits, vector< vector<KthReal> > mapMatrix, vector<KthReal> offMatrix);
+        int addRobot(string robFile, 
+                     KthReal scale, 
+                     vector<KthReal> home, 
+                     vector<vector<KthReal>> limits, 
+                     vector<vector<KthReal>> mapMatrix, 
+                     vector<KthReal> offMatrix);
         bool removeRobot(unsigned index);
         int addObstacle(string obsFile, KthReal scale, vector<KthReal> home);
         bool removeObstacle(unsigned index);
@@ -74,12 +79,39 @@ namespace Kautham {
 
         //Added
         bool ArmInverseKinematics(uint _dim,mt::Transform tfinal, vector < double > &controls);
+        
         bool loadProblem(std::string absPath,std::string Path);
-        bool isGraspableObject(int numObject,uint NumRobot, uint _dim, std::vector<float> Position, Sample &smp, vector<float> &ControlConf, vector<float> HandConf);
+        
+        bool isGraspableObject(int numObject,
+                               uint NumRobot, 
+                               uint _dim, 
+                               std::vector<float> Position, 
+                               Sample &smp, 
+                               vector<float> &ControlConf, 
+                               vector<float> HandConf);
+
         bool solve_savePaths(unsigned int robot, ofstream &outRr, ofstream &outRl );
-        bool plan2Grasp(vector<float> goal, Sample* smp, unsigned int robot, ofstream &outRr, ofstream &outRl);
-        bool plan2Move(vector<float> init, vector<float> goal, Sample* smp, unsigned int robot, ofstream &outRr, ofstream &outRl);
-        bool return2Home(vector<float> init, vector<float> home, unsigned int robot, ofstream &outRr, ofstream &outRl, Sample* smp);
+        
+        bool plan2Grasp(vector<float> goal, 
+                        Sample* smp, 
+                        unsigned int robot, 
+                        ofstream &outRr, 
+                        ofstream &outRl);
+        
+        bool plan2Move(vector<float> init, 
+                       vector<float> goal, 
+                       Sample* smp, 
+                       unsigned int robot, 
+                       ofstream &outRr, 
+                       ofstream &outRl);
+        
+        bool return2Home(vector<float> init, 
+                         vector<float> home, 
+                         unsigned int robot, 
+                         ofstream &outRr, 
+                         ofstream &outRl, 
+                         Sample* smp);
+        
         bool ChangeProblem(const char *absPath, vector<float> right, vector<float> left);
 
     //private:
