@@ -22,8 +22,7 @@ int main(){
     Rob *Rr; //Right Rob = 0
     Rob *Rl; //Left Rob = 1
 
-    //Choose a problem and the path:
-    string absPath,Path;
+    string absPath, Path;
     const char *absPath2;
     absPath = "/home/users/fernando.soler/PHD/Experiments/xml/UR5_AH_LR_BOTH_ARMS.xml";
     absPath2 = "/home/users/fernando.soler/PHD/Experiments/xml/UR5_AH_LR_BOTH_ARMS2.xml";
@@ -55,8 +54,8 @@ int main(){
     Rr = new Rob(ArmRightPath, HandRightPath, ControlPathR, 0, GRASPSIZEr);
     Rl = new Rob(ArmLeftPath, HandLeftPath, ControlPathL, 1, GRASPSIZEl);
 
-    //Rl->printSetGrasp(Rl->SetGrasp);
-    //Rr->printSetGrasp(Rr->SetGrasp);
+    Rl->printSetGrasp(Rl->SetGrasp);
+    Rr->printSetGrasp(Rr->SetGrasp);
 
     kth->setRobControls(ControlPathR, Rr->ControlConf, Rr->ControlConf);
     unsigned int obj_init = 1, obj_goal = 2, obj_exch = 3;
@@ -76,7 +75,7 @@ int main(){
     Sample* rob_goal = new Sample(_dim);
     Sample* rob_exch = new Sample(_dim);
 
-    //GRASPS FOR THE RIGHT HAND ///////////////////////////////////////////////////////////////
+    // Right hand grasps
     for (unsigned int i = 0; i < Rr->SetGrasp.size(); i++) {
         bool reach_init = true, reach_exch = true;
         for (unsigned int j = 0; j < Rr->SetGrasp.at(i).ArmConf.size(); j++) {
@@ -85,15 +84,21 @@ int main(){
 
         // Compute all the grasp that are reachable at Initial Pose of the object
         Rr->CompleteConf.clear();
-        if (kth->isGraspableObject(obj_init, Rr->RobType, _dim, grasp, *grasp_smp,Rr->CompleteConf, Rr->SetGrasp.at(i).HandConf)) {
+        if (kth->isGraspableObject(obj_init, 
+                                   Rr->RobType, 
+                                   _dim, 
+                                   grasp, 
+                                   *grasp_smp,
+                                   Rr->CompleteConf, 
+                                   Rr->SetGrasp.at(i).HandConf)) {
             Rr->graspReachebles.first = Rr->CompleteConf;
-            //cout << "Is graspable at INIT\n";
-            //graspInfo.at(it).graspSmp.push_back(grasp_smp);
+            cout << "Is graspable at initial pose\n";
+            graspInfo.at(it).graspSmp.push_back(grasp_smp);
         }
         else {
             Rr->graspReachebles.first.resize(0);
             reach_init = false;
-            //cout<<"No graspable\n";
+            cout<<"No graspable\n";
             delete grasp_smp;
             grasp_smp = new Sample(_dim);
         }
@@ -103,27 +108,27 @@ int main(){
         if (kth->isGraspableObject(obj_exch, Rr->RobType, _dim, grasp, *grasp_smp, 
                                    Rr->CompleteConf, Rr->SetGrasp.at(i).HandConf)) {
             Rr->graspReachebles.second = Rr->CompleteConf;
-            //cout << "Is graspable at EXCH\n";
-            //graspInfo.at(it).graspSmp.push_back(grasp_smp);
+            cout << "Is graspable at exchange pose\n";
+            graspInfo.at(it).graspSmp.push_back(grasp_smp);
         }
         else {
             Rr->graspReachebles.second.resize(0);
             reach_exch = false;
-            //cout<<"No graspable \n";
+            cout<<"No graspable \n";
             delete grasp_smp;
         }
 
         if(((reach_init) && (reach_exch)) /*|| ((!reach_init) && (reach_exch)) || ((reach_init) && (!reach_exch))*/) {
             Rr->SetGraspReachable.push_back(Rr->graspReachebles);
-            // Rr->printCompatibleGrasps2(Rr->graspReachebles);  //Print the pair of grasp compatible a diferent object's conf
-            //cout << endl;
+            Rr->printCompatibleGrasps2(Rr->graspReachebles);  //Print the pair of grasp compatible a diferent object's conf
+            cout << endl;
         }
         Rr->graspReachebles.first.clear();
         Rr->graspReachebles.second.clear();
         grasp_smp = new Sample(_dim);
     }
 
-    //GRASPS FOR THE LEFT HAND ///////////////////////////////////////////////////////////////
+    // Left hand grasps
     kth->setRobControls(Rl->ControlsPath, Rl->ControlConf, Rl->ControlConf);
 
     for (unsigned int i = 0; i < Rl->SetGrasp.size(); i++){
@@ -133,46 +138,55 @@ int main(){
         }
         // Compute all the grasp that are reachable at Exch Pose of the object
         Rl->CompleteConf.clear();
-        if (kth->isGraspableObject(obj_exch, Rl->RobType, _dim, grasp, *grasp_smp, 
-                                   Rl->CompleteConf, Rl->SetGrasp.at(i).HandConf)){
+        if (kth->isGraspableObject(obj_exch, 
+                                   Rl->RobType, 
+                                   _dim, grasp, 
+                                   *grasp_smp, 
+                                   Rl->CompleteConf,
+                                \Rl->SetGrasp.at(i).HandConf)){
+            
             Rl->graspReachebles.first = Rl->CompleteConf;
-            //cout << "Is graspable\n";
+            cout << "Is graspable\n";
         }
         else {
             Rl->graspReachebles.first.resize(0);
             reach_exch = false;
-            //cout<<"No graspable\n";
+            cout<<"No graspable\n";
             delete grasp_smp;
             grasp_smp = new Sample(_dim);
         }
 
         // Compute all the grasps that are reachable at Goal Pose of the object
         Rl->CompleteConf.clear();
-        if (kth->isGraspableObject(obj_goal, Rl->RobType, _dim, grasp, *grasp_smp, 
-                                   Rl->CompleteConf, Rl->SetGrasp.at(i).HandConf)) {
+        if (kth->isGraspableObject(obj_goal, 
+                                   Rl->RobType, 
+                                   _dim, grasp, 
+                                   *grasp_smp, 
+                                   Rl->CompleteConf, 
+                                   Rl->SetGrasp.at(i).HandConf)) {
             Rl->graspReachebles.second = Rl->CompleteConf;
-            //cout << "Is graspable\n";
+            cout << "Is graspable\n";
         }
         else {
             Rl->graspReachebles.second.resize(0);
             reach_goal = false;
-            //cout<<"No graspable \n";
+            cout<<"No graspable \n";
             delete grasp_smp;
         }
 
-        if(((reach_exch) && (reach_goal)) /*|| ((!reach_exch) && (reach_goal)) || ((reach_exch) && (!reach_goal))*/) {
+        if(((reach_exch) && (reach_goal))) {
             Rl->SetGraspReachable.push_back(Rl->graspReachebles);
-            //Rl->printCompatibleGrasps3(Rl->graspReachebles);  //Print the pair of grasp compatible a diferent object's conf
+            Rl->printCompatibleGrasps3(Rl->graspReachebles);  //Print the pair of grasp compatible a diferent object's conf
         }
         Rl->graspReachebles.first.clear();
         Rl->graspReachebles.second.clear();
         grasp_smp = new Sample(_dim);
     }
 
-    // MOTION PLANNER  ///////////////////////////////////////////////////////////////////////////////
+    // Motion planning for init, goal and exch poses
     kth->removeObstacle(obj_exch);
     kth->removeObstacle(obj_goal);
-    //RIGHT
+    // right robot
     kth->setRobControls(ControlPathR, Rr->ControlConf, Rr->ControlConf);
     for (unsigned int i =1; i < Rr->SetGraspReachable.size(); i++) {
 
@@ -183,12 +197,17 @@ int main(){
                 cout << "with the Right hand " << endl;
                 kth->attachObstacle2RobotLink(Rr->RobType, 7, obj_init);
 
-                if(kth->plan2Move(Rr->SetGraspReachable.at(i).first, Rr->SetGraspReachable.at(i).second,
-                                  rob_exch, Rr->RobType, Rr->out, Rl->out)){
+                if(kth->plan2Move(Rr->SetGraspReachable.at(i).first, 
+                                  Rr->SetGraspReachable.at(i).second,
+                                  rob_exch, 
+                                  Rr->RobType, 
+                                  Rr->out, 
+                                  Rl->out)) {
+
                     cout << "with the Right hand " << endl;
                     cout << endl;
 
-                    //LEFT
+                    // left robot
                     Rl->ChangeControl(ControlPathL2, Rr->SetGraspReachable.at(i).second);
                     if(kth->setRobControls(ControlPathL2, Rl->ControlConf, Rl->ControlConf)){
                         cout << "Left controls set" << endl;
@@ -202,71 +221,80 @@ int main(){
                                     cout << "with the Left hand " << endl;
                                     cout << endl;
 
-                                    //Right
+                                    // right robot
                                     Rr->ChangeControl(ControlPathR2, Rl->SetGraspReachable.at(j).first);
                                     kth->setRobControls(ControlPathR2, Rr->SetGraspReachable.at(i).second, Rr->SetGraspReachable.at(i).second);
                                     kth->detachObstacle(obj_init);
 
-                                    //Left
+                                    // left robot
                                     Rl->ChangeControl(ControlPathL2, Rr->ControlConf);
                                     kth->setRobControls(ControlPathL2, Rl->SetGraspReachable.at(j).first, Rl->SetGraspReachable.at(j).first);
-                                    //kth->attachObstacle2RobotLink(Rl->RobType, 7, obj_init);
+                                    kth->attachObstacle2RobotLink(Rl->RobType, 7, obj_init);
 
-                                    if(kth->plan2Move(Rl->SetGraspReachable.at(j).first, Rl->SetGraspReachable.at(j).second, 
-                                                      rob_goal, Rl->RobType, Rr->out, Rl->out)) {
+                                    if(kth->plan2Move(Rl->SetGraspReachable.at(j).first, 
+                                                      Rl->SetGraspReachable.at(j).second, 
+                                                      rob_goal, 
+                                                      Rl->RobType, 
+                                                      Rr->out, 
+                                                      Rl->out)) {
+
                                         cout << "with the Left hand." << endl;
                                         cout << endl;
-                                        //kth->detachObstacle(obj_init);
-
+                                        kth->detachObstacle(obj_init);
                                         if(kth->return2Home(Rl->SetGraspReachable.at(j).second, Rl->ControlConf, 
                                                             Rl->RobType, Rr->out, Rl->out, rob_homeL)) {
                                             cout << "with the LEFT arm." << endl;
                                             cout << endl;
 
-                                            //RIGHT
+                                            // right robot
                                             Rr->ChangeControl(ControlPathR2, Rl->ControlConf);
                                             kth->setRobControls(ControlPathR2, Rr->SetGraspReachable.at(i).second, Rr->SetGraspReachable.at(i).second);
 
-                                            if(kth->return2Home(Rr->SetGraspReachable.at(i).second, Rr->ControlConf, 
-                                                                Rr->RobType, Rr->out, Rl->out, rob_homeR)) {
+                                            if(kth->return2Home(Rr->SetGraspReachable.at(i).second, 
+                                                                Rr->ControlConf, 
+                                                                Rr->RobType, 
+                                                                Rr->out, 
+                                                                Rl->out, 
+                                                                rob_homeR)) {
+
                                                 cout << "with the RIGHT arm." << endl;
                                                 cout << endl;
                                             }
                                         }
                                     }
 
+                                    kth->closeProblem();
+                                    kth->ChangeProblem(absPath2, Rr->SetGraspReachable.at(i).second, Rl->SetGraspReachable.at(j).first);
 
-                                    //                                    kth->closeProblem();
-                                    //                                    kth->ChangeProblem(absPath2, Rr->SetGraspReachable.at(i).second, Rl->SetGraspReachable.at(j).first);
+                                    //Load problem:
+                                    if(kth->loadProblem(absPath2,Path))
+                                        cout << "THE PROBLEM FILE (" << absPath2 << ") HAS BEEN LOADED SUCCESSFULLY\n";                         
+                                    else
+                                        cout << "THE PROBLEM FILE HAS NOT BEEN LOADED. "
+                                        << "Please take care with the problem definition \n";
+                                        return -1;
+                                                                       
 
-                                    //                                    //Load problem:
-                                    //                                    if(kth->loadProblem(absPath2,Path)){
-                                    //                                        cout << "THE PROBLEM FILE (" << absPath2 << ") HAS BEEN LOADED SUCCESSFULLY\n";
-                                    //                                    }
-                                    //                                    else{
-                                    //                                        cout << "THE PROBLEM FILE HAS NOT BEEN LOADED. "
-                                    //                                             << "Please take care with the problem definition \n";
-                                    //                                        return -1;
-                                    //                                    }
+                                    if(kth->setRobControls(ControlPathL2, Rl->ControlConf, Rl->ControlConf)) {
+                                        cout << "Left controls set" << endl;
+                                        kth->attachObstacle2RobotLink(Rl->RobType, 7, obj_exch);
+                                        kth->removeObstacle(obj_init);
+                                        kth->removeObstacle(obj_goal);
 
-                                    //                                    if(kth->setRobControls(ControlPathL2, Rl->ControlConf, Rl->ControlConf)){
-                                    //                                        cout << "Left controls set" << endl;
+                                        if(kth->plan2Move(Rl->SetGraspReachable.at(j).first, 
+                                                          Rl->SetGraspReachable.at(j).second, 
+                                                          rob_goal, 
+                                                          Rl->RobType, 
+                                                          Rr->out, 
+                                                          Rl->out)) {
+                                            cout << "with the Left hand." << endl;
+                                            break;
+                                        }
+                                    }
 
-                                    //                                        kth->attachObstacle2RobotLink(Rl->RobType, 7, obj_exch);
-                                    //                                        kth->removeObstacle(obj_init);
-                                    //                                        kth->removeObstacle(obj_goal);
-
-                                    //                                        if(kth->plan2Move(Rl->SetGraspReachable.at(j).first, Rl->SetGraspReachable.at(j).second, rob_goal, Rl->RobType, Rr->out, Rl->out)){
-                                    //                                            cout << "with the Left hand." << endl;
-                                    //                                            break;
-
-                                    //                                        }
-
-                                    //                                    }
-
-
-                                }
+                                 }
                             }
+                        }
                             break;
                         }
                     }

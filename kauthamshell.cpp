@@ -705,6 +705,7 @@ bool kauthamshell::solve_savePaths(unsigned int robot, ofstream &outRr, ofstream
     if (_problem->getPlanner()->solveAndInherit()){
         _solved = true;
 
+        og::S
         og::SimpleSetupPtr ss = ((omplplanner::omplPlanner *)_problem->getPlanner())->SimpleSetupPtr();
         std::vector< ob::State * >  pathstates = ss->getSolutionPath().getStates();
         ob::State *state;

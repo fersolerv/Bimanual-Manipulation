@@ -36,7 +36,9 @@ namespace Kautham {
     public:
         inline kauthamshell() {_problem = NULL;} //! Constructor
         inline ~kauthamshell(){} //! Destructor
-        inline bool problemOpened() {return(_problem != NULL);} //! Informs wether there is a problem opened;
+        inline bool problemOpened() {
+            return(_problem != NULL);
+        } //! Informs wether there is a problem opened;
         inline void closeProblem() { if(problemOpened()) delete _problem;}
         bool openProblem(istream* inputfile, vector<string> def_path = vector<string>());
         bool openProblem(string problemfilename, vector<string> def_path);
