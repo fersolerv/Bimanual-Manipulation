@@ -1,3 +1,3 @@
 # Bimanual-Manipulation
 
-Project to manipale objects using a dual-arm robot
+Project to manipulate objects using a dual-arm robot
